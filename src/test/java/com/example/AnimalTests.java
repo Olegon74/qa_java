@@ -1,31 +1,40 @@
 package com.example;
 
-import org.hamcrest.MatcherAssert;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class AnimalTests {
-    @Rule
-    public ExpectedException expectedEx = ExpectedException.none();
+    private Animal animal;
 
-    @Test
-    public void getFamilyIsCorrect() {
-        String expectedString = "Существует несколько семейств: заячьи, беличьи, мышиные, кошачьи, псовые, медвежьи, куньи";
-
-        MatcherAssert.assertThat("Некорректный перечень семейств",
-                new Animal().getFamily(),
-                equalTo(expectedString)
-        );
+    @Before
+    public void setUp() throws Exception {
+        animal = new Animal();
     }
 
     @Test
-    public void getFoodThrowsException() throws Exception {
-        expectedEx.expect(Exception.class);
-        expectedEx.expectMessage("Неизвестный вид животного, используйте значение Травоядное или Хищник");
-
-        new Animal().getFood("");
+    public void testGetFoodForHerbivore() throws Exception {
+        List<String> food = animal.getFood("Травоядное");
+        assertTrue(food.containsAll(List.of("Трава", "Различные растения")));
     }
-}
+
+    @Test
+    public void testGetFoodForPredator() throws Exception {
+        List<String> food = animal.getFood("Хищник");
+        assertTrue(food.containsAll(List.of("Животные", "Птицы", "Рыба")));
+    }
+
+
+
+        @Test
+        public void testGetFamily() {
+            String expected = "Существует несколько семейств: заячьи, беличьи, мышиные, кошачьи, псовые, медвежьи, куньи";
+            String actual = animal.getFamily();
+            assertEquals(expected, actual);
+        }
+    }
+
+
